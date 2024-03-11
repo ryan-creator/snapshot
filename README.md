@@ -8,6 +8,7 @@ SwiftUI Snapshot Testing is a Swift package that facilitates snapshot testing fo
 -   [Usage](#usage)
 -   [How to Test Views](#how-to-test-views)
 -   [Snapshot Files Location](#snapshot-files-location)
+-   [License](#license)
 
 ## Installation <a name="installation"></a>
 
@@ -138,3 +139,6 @@ YourProject
 |       |-- SnapshotTests1
 |       |-- SnapshotTests2
 ```
+## License <a name="license"></a>
+
+This library is released under the MIT license. See [LICENSE](https://github.com/pointfreeco/swift-snapshot-testing/blob/main/LICENSE) for details.
