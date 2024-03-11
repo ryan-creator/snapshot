@@ -57,12 +57,16 @@ targets: [
 
 SwiftUI Snapshot Testing extends XCTestCase with convenient methods for snapshot testing. You can use it to assert that a SwiftUI view matches a saved snapshot or to update snapshots when needed.
 
+> [!IMPORTANT]  
+> The tests must be run on the main thread so please attach `@MainActor` to the test or its parent class.
+
 ```swift
 import XCTest
 import Snapshot
 
 class YourSnapshotTests: XCTestCase {
 
+    @MainActor
     func testYourView() {
         // Use assertSnapshot to compare or update snapshots
         assertSnapshot(of: YourSwiftUIView(), snapshotName: "YourSnapshotName")
@@ -102,6 +106,7 @@ When set to `true`, it saves snapshots that do not match with a "-FAILED" suffix
 ```swift
 class YourSnapshotTests: XCTestCase {
 
+    @MainActor
     func testYourView() {
         // Configure snapshot testing options
         recordSnapshots = true
@@ -121,6 +126,7 @@ To test your SwiftUI views, use the assertSnapshot method provided by XCTestCase
 ```swift
 class YourSnapshotTests: XCTestCase {
 
+    @MainActor
     func testYourView() {
         // Use assertSnapshot to compare or update snapshots
         assertSnapshot(of: YourSwiftUIView(), snapshotName: "YourSnapshotName")
