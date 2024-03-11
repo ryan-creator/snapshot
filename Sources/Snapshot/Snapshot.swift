@@ -7,16 +7,19 @@ import SwiftUI
 @available(iOS 16.0, *)
 public extension XCTestCase {
     
+    /// Record new snapshots, this will overwrite any existing snapshots.
     var recordSnapshots: Bool {
         get { SnapshotManager.recordNewSnapshots }
         set { SnapshotManager.recordNewSnapshots = newValue }
     }
     
+    /// Delete the existing snapshots and write new snapshots.
     var debugMode: Bool {
         get { SnapshotManager.debugMode }
         set { SnapshotManager.debugMode = newValue }
     }
     
+    /// Delete existing snapshots
     var deleteSnapshots: Bool {
         get { SnapshotManager.deleteSnapshots }
         set { SnapshotManager.deleteSnapshots = newValue }
@@ -56,6 +59,12 @@ public extension XCTestCase {
             }
             
             if newImage.pngData() != previousImage.pngData() {
+                
+                if saveFailedSnapshots {
+                    try manager.saveSnapshot(image: newImage, named: "\(named)-FAILED", testFilePath: file)
+                }
+                
+                
                 XCTFail("Snapshots do not match.", file: file, line: line)
                 return
             }
