@@ -2,6 +2,9 @@
 
 SwiftUI Snapshot Testing is a Swift package that facilitates snapshot testing for SwiftUI views. It allows you to easily capture and compare snapshots of SwiftUI views, helping you identify any unintended changes in the UI.
 
+> [!WARNING]  
+> **Only suitable for iOS 16 and above**
+
 ## Table of Contents
 
 -   [Installation](#installation)
@@ -71,11 +74,14 @@ class YourSnapshotTests: XCTestCase {
 
 You can customise the behaviour of SwiftUI Snapshot Testing by modifying the configuration flags available on XCTestCase.
 
-If any of the configuration flags are set to `true` during the test execution, the tests will fail. This ensures that you do not accidentally leave any of the flags set to `true`, which could potentially affect the reliability of your snapshot tests.
+> [!IMPORTANT]  
+> If any of the configuration flags are set to `true` during the test execution, the tests will fail. This ensures that you do not accidentally leave any of the flags set to `true`, which could potentially affect the reliability of your snapshot tests.
 
-### ⚠️ Warning: Flags' Global Impact
-
-Setting any of the configuration flags to `true` will globally impact all tests. However, it's important to note that the flags only take effect when the corresponding tests are executed. Be careful what tests are run when a flag is set to true.
+> [!WARNING]
+>
+> #### Warning: Flags' Global Impact
+>
+> Setting any of the configuration flags to `true` will globally impact all tests. However, it's important to note that the flags only take effect when the corresponding tests are executed. Be careful what tests are run when a flag is set to true.
 
 #### `recordSnapshots`
 
@@ -139,6 +145,7 @@ YourProject
 |       |-- SnapshotTests1
 |       |-- SnapshotTests2
 ```
+
 ## License <a name="license"></a>
 
 This library is released under the MIT license. See [LICENSE](https://github.com/pointfreeco/swift-snapshot-testing/blob/main/LICENSE) for details.
