@@ -29,7 +29,7 @@ Now you can import the package in your Swift files where you want to perform sna
 
 ### Swift Package Manager (SPM)
 
-If you want to use SnapshotTesting in any other project that uses SPM, add the package as a dependency in Package.swift:
+If you want to use Snapshot in any other project that uses SPM, add the package as a dependency in Package.swift:
 
 ```swift
 dependencies: [
@@ -41,7 +41,7 @@ dependencies: [
 ]
 ```
 
-Next, add SnapshotTesting as a dependency of your test target:
+Next, add Snapshot as a dependency of your test target:
 
 ```swift
 targets: [
