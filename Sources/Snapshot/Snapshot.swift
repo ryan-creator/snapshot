@@ -60,12 +60,12 @@ public extension XCTestCase {
             return
         }
         
-        if let message = manager.checkRuntimeMode(image: newImage, testFilePath: file, named: named) {
-            XCTFail(message, file: file, line: line)
-            return
-        }
-        
         do {
+            
+            if let message = try manager.checkRuntimeMode(image: newImage, testFilePath: file, named: named) {
+                XCTFail(message, file: file, line: line)
+                return
+            }
         
             guard let previousImage = manager.getSavedSnapshot(named: named, testFilePath: file) else {
                 try manager.saveSnapshot(image: newImage, named: named, testFilePath: file)
@@ -86,7 +86,7 @@ public extension XCTestCase {
         
             try manager.saveSnapshot(image: newImage, named: named, testFilePath: file)
         } catch {
-            XCTFail("Failed to save snapshot.", file: file, line: line)
+            XCTFail("Failed to run snapshot tests.", file: file, line: line)
         }
     }
 }

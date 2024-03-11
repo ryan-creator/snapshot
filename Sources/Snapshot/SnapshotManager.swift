@@ -23,24 +23,26 @@ class SnapshotManager {
     
     private init() {}
     
-    func checkRuntimeMode(image: UIImage, testFilePath: StaticString, named: String) -> String? {
+    func checkRuntimeMode(image: UIImage, testFilePath: StaticString, named: String) throws -> String? {
         
         if SnapshotManager.debugMode {
-            deleteSnapshots(testFilePath: testFilePath)
-            saveSnapshot(image: image, named: named, testFilePath: testFilePath)
+            try deleteSnapshots(testFilePath: testFilePath)
+            try saveSnapshot(image: image, named: named, testFilePath: testFilePath)
             return "DEBUG MODE: New snapshots saved."
         }
         
         if SnapshotManager.deleteSnapshots {
-            deleteSnapshots(testFilePath: testFilePath)
+            try deleteSnapshots(testFilePath: testFilePath)
             return "Snapshots successfully delete."
         }
         
         if SnapshotManager.recordNewSnapshots {
-            deleteSnapshots(testFilePath: testFilePath)
-            saveSnapshot(image: image, named: named, testFilePath: testFilePath)
+            try deleteSnapshots(testFilePath: testFilePath)
+            try saveSnapshot(image: image, named: named, testFilePath: testFilePath)
             return "Successfully recorded new snapshots."
         }
+        
+        return nil
     }
     
     func getSavedSnapshot(named: String, testFilePath: StaticString) -> UIImage? {
@@ -61,21 +63,22 @@ class SnapshotManager {
     func saveSnapshot(image: UIImage, named: String, testFilePath: StaticString) throws {
 
         let snapshotTestUrl = getSnapshotUrl(testFilePath: testFilePath, named: named)
-        let snapshotTestDirectoryUrl = getSnapshotDirectoryUrl(testFilePath: testFilePath, named: named)
+        let snapshotTestDirectoryUrl = getSnapshotDirectoryUrl(testFilePath: testFilePath)
         
         try fileManager.createDirectory(at: snapshotTestDirectoryUrl, withIntermediateDirectories: true)
         
         try image.pngData()?.write(to: snapshotTestUrl)
     }
     
-    func deleteSnapshots(testFilePath: StaticString) {
-        fileManager.removeItem(at: getSnapshotDirectoryUrl(testFilePath: testFilePath, named: named))
+    func deleteSnapshots(testFilePath: StaticString) throws {
+        try fileManager.removeItem(at: getSnapshotDirectoryUrl(testFilePath: testFilePath))
     }
 }
 
+@available(iOS 16.0, *)
 private extension SnapshotManager {
     
-    func getSnapshotDirectoryUrl(testFilePath: StaticString, named: String) -> URL {
+    func getSnapshotDirectoryUrl(testFilePath: StaticString) -> URL {
         let testFileUrl = URL(filePath: String(testFilePath))
         let testFileName = testFileUrl.lastPathComponent.split(separator: ".").first ?? "unknown"
         
@@ -88,7 +91,7 @@ private extension SnapshotManager {
     func getSnapshotUrl(testFilePath: StaticString, named: String) -> URL {
         
         let snapshotName = "\(named).\(snapshotImageType)"
-        let snapshotTestDirectoryUrl = getSnapshotDirectoryUrl(testFilePath: testFilePath, named: named)
+        let snapshotTestDirectoryUrl = getSnapshotDirectoryUrl(testFilePath: testFilePath)
         
         return snapshotTestDirectoryUrl.appending(path: snapshotName)
     }
