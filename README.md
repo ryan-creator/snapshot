@@ -69,7 +69,7 @@ class YourSnapshotTests: XCTestCase {
     @MainActor
     func testYourView() {
         // Use assertSnapshot to compare or update snapshots
-        assertSnapshot(of: YourSwiftUIView(), snapshotName: "YourSnapshotName")
+        assertSnapshot(of: YourSwiftUIView(), named: "YourSnapshotName")
     }
 }
 ```
@@ -129,7 +129,7 @@ class YourSnapshotTests: XCTestCase {
     @MainActor
     func testYourView() {
         // Use assertSnapshot to compare or update snapshots
-        assertSnapshot(of: YourSwiftUIView(), snapshotName: "YourSnapshotName")
+        assertSnapshot(of: YourSwiftUIView(), named: "YourSnapshotName")
     }
 }
 ```
