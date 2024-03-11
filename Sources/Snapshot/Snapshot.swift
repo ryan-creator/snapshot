@@ -7,13 +7,13 @@ import SwiftUI
 @available(iOS 16.0, *)
 public extension XCTestCase {
     
-    /// Record new snapshots, this will overwrite any existing snapshots.
+    /// Record new snapshots; this will overwrite any existing snapshots.
     var recordSnapshots: Bool {
         get { SnapshotManager.recordNewSnapshots }
         set { SnapshotManager.recordNewSnapshots = newValue }
     }
     
-    /// Delete the existing snapshots and write new snapshots.
+    /// Delete existing snapshots and write new snapshots.
     var debugMode: Bool {
         get { SnapshotManager.debugMode }
         set { SnapshotManager.debugMode = newValue }
