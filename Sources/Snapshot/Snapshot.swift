@@ -25,17 +25,32 @@ public extension XCTestCase {
         set { SnapshotManager.deleteSnapshots = newValue }
     }
     
+    ///  Save snapshots that do not match. The snapshots are saved under the same
+    ///  name as the standard snapshots but with the "...-FAILED" attached to the name.
     var saveFailedSnapshots: Bool {
         get { SnapshotManager.saveFailedSnapshots }
         set { SnapshotManager.saveFailedSnapshots = newValue }
     }
     
     @MainActor
+    /// Assert in SwiftUI view against a saved snapshot which is identified by the `named` parameter.
+    /// - Parameters:
+    ///   - of: The closure that contains the view to snapshot.
+    ///   - named: The name of the snapshot file to compare against and or save the new snapshot under.
+    ///   - file: The url string of the test file that this function will exist in. Please leave empty because
+    ///   this is used to locate the saved snapshot directory.
+    ///   - line: The line this function is located at. This is to attach the failure message to the correct assertion.
     func assertSnapshot<V>(@ViewBuilder of view: () -> V, named: String, file: StaticString = #file, line: UInt = #line) where V : View {
         assertSnapshot(of: view(), named: named, file: file, line: line)
     }
     
     @MainActor
+    /// Assert in SwiftUI view against a saved snapshot which is identified by the `named` parameter.
+    /// - Parameters:
+    ///   - view: The view to snapshot.
+    ///   - named: The name of the snapshot file to compare against and or save the new snapshot under.
+    ///   - file: The url string of the test file that this function will exist in. Please leave empty because
+    ///   this is used to locate the saved snapshot directory.
     func assertSnapshot<V>(of view: V, named: String, file: StaticString = #file, line: UInt = #line) where V : View {
         
         let manager = SnapshotManager.shared
