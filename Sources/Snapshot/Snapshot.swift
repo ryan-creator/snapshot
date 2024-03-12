@@ -84,7 +84,6 @@ public extension XCTestCase {
                 return
             }
         
-            try manager.saveSnapshot(image: newImage, named: named, testFilePath: file)
         } catch {
             XCTFail("Failed to run snapshot tests.", file: file, line: line)
         }

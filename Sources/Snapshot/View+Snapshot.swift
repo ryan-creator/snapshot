@@ -12,6 +12,8 @@ extension View {
     
     @MainActor
     func snapshot() -> UIImage? {
-        ImageRenderer(content: self).uiImage
+        let renderer = ImageRenderer(content: self)
+        renderer.colorMode = .extendedLinear
+        return renderer.uiImage
     }
 }

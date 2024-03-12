@@ -28,7 +28,22 @@ class SnapshotManager {
         if SnapshotManager.debugMode {
             try deleteSnapshots(testFilePath: testFilePath, named: named)
             try saveSnapshot(image: image, named: named, testFilePath: testFilePath)
-            return "DEBUG MODE: New snapshots saved."
+            
+            guard let savedImage = getSavedSnapshot(named: named, testFilePath: testFilePath) else {
+                return "DEBUG MODE: Failed to find an existing snapshot."
+            }
+            
+            if image.pngData() != savedImage.pngData() {
+                
+                if SnapshotManager.saveFailedSnapshots {
+                    try saveSnapshot(image: image, named: "\(named)-FAILED", testFilePath: testFilePath)
+                }
+                
+                return "DEBUG MODE: Snapshots do not match."
+            }
+            
+            
+            return "DEBUG MODE: New snapshots saved and matches."
         }
         
         if SnapshotManager.deleteSnapshots {
