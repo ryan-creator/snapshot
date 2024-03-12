@@ -8,26 +8,26 @@ import SwiftUI
 public extension XCTestCase {
     
     /// Record new snapshots; this will overwrite any existing snapshots.
-    var recordSnapshots: Bool {
+    var snapshotsRecordNew: Bool {
         get { SnapshotManager.recordNewSnapshots }
         set { SnapshotManager.recordNewSnapshots = newValue }
     }
     
     /// Delete existing snapshots and write new snapshots.
-    var debugMode: Bool {
+    var snapshotsDebugMode: Bool {
         get { SnapshotManager.debugMode }
         set { SnapshotManager.debugMode = newValue }
     }
     
     /// Delete existing snapshots
-    var deleteSnapshots: Bool {
+    var snapshotsDeleteExisting: Bool {
         get { SnapshotManager.deleteSnapshots }
         set { SnapshotManager.deleteSnapshots = newValue }
     }
     
     ///  Save snapshots that do not match. The snapshots are saved under the same
     ///  name as the standard snapshots but with the "...-FAILED" attached to the name.
-    var saveFailedSnapshots: Bool {
+    var snapshotsSaveFailed: Bool {
         get { SnapshotManager.saveFailedSnapshots }
         set { SnapshotManager.saveFailedSnapshots = newValue }
     }
@@ -75,7 +75,7 @@ public extension XCTestCase {
             
             if newImage.pngData() != previousImage.pngData() {
                 
-                if saveFailedSnapshots {
+                if snapshotsSaveFailed {
                     try manager.saveSnapshot(image: newImage, named: "\(named)-FAILED", testFilePath: file)
                 }
                 
