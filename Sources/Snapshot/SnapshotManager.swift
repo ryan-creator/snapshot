@@ -26,18 +26,18 @@ class SnapshotManager {
     func checkRuntimeMode(image: UIImage, testFilePath: StaticString, named: String) throws -> String? {
         
         if SnapshotManager.debugMode {
-            try deleteSnapshots(testFilePath: testFilePath)
+            try deleteSnapshots(testFilePath: testFilePath, named: named)
             try saveSnapshot(image: image, named: named, testFilePath: testFilePath)
             return "DEBUG MODE: New snapshots saved."
         }
         
         if SnapshotManager.deleteSnapshots {
-            try deleteSnapshots(testFilePath: testFilePath)
+            try deleteSnapshots(testFilePath: testFilePath, named: named)
             return "Snapshots successfully delete."
         }
         
         if SnapshotManager.recordNewSnapshots {
-            try deleteSnapshots(testFilePath: testFilePath)
+            try deleteSnapshots(testFilePath: testFilePath, named: named)
             try saveSnapshot(image: image, named: named, testFilePath: testFilePath)
             return "Successfully recorded new snapshots."
         }
@@ -70,8 +70,18 @@ class SnapshotManager {
         try image.pngData()?.write(to: snapshotTestUrl)
     }
     
-    func deleteSnapshots(testFilePath: StaticString) throws {
-        try fileManager.removeItem(at: getSnapshotDirectoryUrl(testFilePath: testFilePath))
+    func deleteSnapshots(testFilePath: StaticString, named: String) throws {
+        
+        let snapshotURL = getSnapshotUrl(testFilePath: testFilePath, named: named)
+        let snapshotFailureURL = getSnapshotFailedUrl(testFilePath: testFilePath, named: named)
+        
+        if fileManager.fileExists(atPath: snapshotURL.path()) {
+            try fileManager.removeItem(at: snapshotURL)
+        }
+        
+        if fileManager.fileExists(atPath: snapshotFailureURL.path()) {
+            try fileManager.removeItem(at: snapshotFailureURL)
+        }
     }
 }
 
@@ -91,6 +101,14 @@ private extension SnapshotManager {
     func getSnapshotUrl(testFilePath: StaticString, named: String) -> URL {
         
         let snapshotName = "\(named).\(snapshotImageType)"
+        let snapshotTestDirectoryUrl = getSnapshotDirectoryUrl(testFilePath: testFilePath)
+        
+        return snapshotTestDirectoryUrl.appending(path: snapshotName)
+    }
+    
+    func getSnapshotFailedUrl(testFilePath: StaticString, named: String) -> URL {
+        
+        let snapshotName = "\(named)-FAILED.\(snapshotImageType)"
         let snapshotTestDirectoryUrl = getSnapshotDirectoryUrl(testFilePath: testFilePath)
         
         return snapshotTestDirectoryUrl.appending(path: snapshotName)
