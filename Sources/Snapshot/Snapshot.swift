@@ -1,6 +1,8 @@
 // The Swift Programming Language
 // https://docs.swift.org/swift-book
 
+#if !os(macOS)
+
 import XCTest
 import SwiftUI
 
@@ -76,7 +78,13 @@ public extension XCTestCase {
             if newImage.pngData() != previousImage.pngData() {
                 
                 if snapshotsSaveFailed {
-                    try manager.saveSnapshot(image: newImage, named: "\(named)-FAILED", testFilePath: file)
+                    let snapshotComparisonImage = manager.createFailedSnapshotComparison(
+                        savedSnapshot: previousImage,
+                        newSnapshot: newImage)
+                    try manager.saveSnapshot(
+                        image: snapshotComparisonImage,
+                        named: "\(named)-FAILED",
+                        testFilePath: file)
                 }
                 
                 
@@ -89,3 +97,5 @@ public extension XCTestCase {
         }
     }
 }
+
+#endif

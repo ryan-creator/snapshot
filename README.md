@@ -36,7 +36,7 @@ dependencies: [
     .package(
         name: "Snapshot",
         url: "https://github.com/ryan-creator/snapshot.git",
-        from: "1.1.0"
+        from: "1.3.0"
     ),
 ]
 ```
@@ -57,16 +57,12 @@ targets: [
 
 SwiftUI Snapshot Testing extends XCTestCase with convenient methods for snapshot testing. You can use it to assert that a SwiftUI view matches a saved snapshot or to update snapshots when needed.
 
-> [!IMPORTANT]  
-> The tests must be run on the main thread so please attach `@MainActor` to the test or its parent class.
-
 ```swift
 import XCTest
 import Snapshot
 
 class YourSnapshotTests: XCTestCase {
 
-    @MainActor
     func testYourView() {
         // Use assertSnapshot to compare or update snapshots
         assertSnapshot(of: YourSwiftUIView(), named: "YourSnapshotName")
@@ -79,7 +75,7 @@ class YourSnapshotTests: XCTestCase {
 You can customise the behaviour of SwiftUI Snapshot Testing by modifying the configuration flags available on XCTestCase.
 
 > [!IMPORTANT]  
-> If any of the configuration flags are set to `true` during the test execution, the tests will fail. This ensures that you do not accidentally leave any of the flags set to `true`, which could potentially affect the reliability of your snapshot tests.
+> If any of the `snapshotsRecordNew`, `snapshotsDebugMode`, or `snapshotsDeleteExisting` configuration flags are set to `true` during the test execution, the tests will fail. This ensures that you do not accidentally leave any of the flags set to `true`, which could potentially affect the outcome of your snapshot tests.
 
 > [!WARNING]
 >
@@ -87,30 +83,29 @@ You can customise the behaviour of SwiftUI Snapshot Testing by modifying the con
 >
 > Setting any of the configuration flags to `true` will globally impact all tests. However, it's important to note that the flags only take effect when the corresponding tests are executed. Be careful what tests are run when a flag is set to true.
 
-#### `recordSnapshots`
+#### `snapshotsRecordNew`
 
 When set to `true`, it records new snapshots, overwriting existing ones.
 
-#### `debugMode`
+#### `snapshotsDebugMode`
 
 When set to `true`, it deletes existing snapshots and writes new ones.
 
-#### `deleteSnapshots`
+#### `snapshotsDeleteExisting`
 
 When set to `true`, it deletes existing snapshots.
 
-#### `saveFailedSnapshots`
+#### `snapshotsSaveFailed`
 
-When set to `true`, it saves snapshots that do not match with a "-FAILED" suffix.
+When set to `true`, it saves comparison snapshots with a "-FAILED" suffix. This allows for easy comparison between the saved and new snapshot.
 
 ```swift
 class YourSnapshotTests: XCTestCase {
 
-    @MainActor
     func testYourView() {
         // Configure snapshot testing options
-        recordSnapshots = true
-        saveFailedSnapshots = true
+        snapshotsRecordNew = true
+        snapshotsSaveFailed = true
 
         // Use assertSnapshot to compare or update snapshots
         assertSnapshot(of: YourSwiftUIView(), snapshotName: "YourSnapshotName")
@@ -126,10 +121,43 @@ To test your SwiftUI views, use the assertSnapshot method provided by XCTestCase
 ```swift
 class YourSnapshotTests: XCTestCase {
 
-    @MainActor
     func testYourView() {
         // Use assertSnapshot to compare or update snapshots
         assertSnapshot(of: YourSwiftUIView(), named: "YourSnapshotName")
+    }
+}
+```
+
+You can modify the view and its corresponding snapshot by using the standard SwiftUI modifiers.
+
+```swift
+class YourSnapshotTests: XCTestCase {
+
+    func testYourView() {
+        assertSnapshot(of: {
+            YourSwiftUIView()
+                .padding()
+                .frame(width: 200, height: 200)
+        }, named: "YourSnapshotName")
+    }
+}
+```
+
+To change any environment values such as `colorScheme`, `layoutDirection`, `dynamicTypeSize`, etc. You can use the `transformEnvironment` modifier.
+
+```swift
+class YourSnapshotTests: XCTestCase {
+
+    func testYourView() {
+        assertSnapshot(of: {
+            YourSwiftUIView()
+              .transformEnvironment(\.colorScheme) { colorScheme in
+                  colorScheme = .dark
+              }
+              .transformEnvironment(\.dynamicTypeSize) { typeSize in
+                  typeSize = .xxLarge
+              }
+        }, named: "YourSnapshotName")
     }
 }
 ```
@@ -145,7 +173,7 @@ YourProject
 |-- Sources
 |-- Tests
 |   |-- YourSnapshotTests.swift
-|       |-- _snapshots__
+|       |-- __snapshots__
 |       |   |-- YourSnapshotName1.png
 |       |   |-- YourSnapshotName2.png
 |       |-- SnapshotTests1

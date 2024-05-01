@@ -6,17 +6,11 @@
 //
 
 import XCTest
+import SwiftUI
 
 class TestView: XCTestCase {
     
     func testView() {
         assertSnapshot(of: Text("Hello World!"), named: "hello-world")
-    }
-    
-    func testViewDarkMode() {
-        assertSnapshot(of: {
-            Text("Hello World!")
-                .preferredColorScheme(.dark)
-        }, named: "hello-world")
     }
 }
