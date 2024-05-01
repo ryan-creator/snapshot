@@ -5,6 +5,8 @@
 //  Created by Ryan Cole on 7/03/24.
 //
 
+#if !os(macOS)
+
 import Foundation
 
 extension String {
@@ -14,3 +16,5 @@ extension String {
         }
     }
 }
+
+#endif

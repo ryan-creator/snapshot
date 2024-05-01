@@ -5,6 +5,7 @@
 //  Created by Ryan Cole on 7/03/24.
 //
 
+#if !os(macOS)
 import UIKit
 
 @available(iOS 16.0, *)
@@ -98,6 +99,72 @@ class SnapshotManager {
             try fileManager.removeItem(at: snapshotFailureURL)
         }
     }
+    
+    func createFailedSnapshotComparison(savedSnapshot: UIImage, newSnapshot: UIImage) -> UIImage {
+        
+        let verticalSpacing: CGFloat = 8
+        let horizontalSpacing: CGFloat = 4
+        let fontSize: CGFloat = 14
+        let headerSpacing = fontSize + horizontalSpacing
+        
+        let size = CGSize(
+            width: (savedSnapshot.size.width * 2) + verticalSpacing,
+            height: (savedSnapshot.size.height * 2) + (headerSpacing * 2))
+        
+        let renderer = UIGraphicsImageRenderer(size: size)
+        
+        var savedTitlePoint: CGPoint {
+            CGPoint(x: 0, y: 0)
+        }
+        
+        var savedImagePoint: CGPoint {
+            CGPoint(x: 0, y: headerSpacing)
+        }
+        
+        var newTitlePoint: CGPoint {
+            CGPoint(x: savedSnapshot.size.width + verticalSpacing, y: 0)
+        }
+        
+        var newImagePoint: CGPoint {
+            CGPoint(x: savedSnapshot.size.width + verticalSpacing, y: headerSpacing)
+        }
+        
+        var overlayTitlePoint: CGPoint {
+            CGPoint(x: 0, y: savedSnapshot.size.height + headerSpacing)
+        }
+        
+        var overlayImagePoint: CGPoint {
+            CGPoint(x: 0, y: savedSnapshot.size.height + (headerSpacing * 2))
+        }
+        
+        return renderer.image { context in
+            
+            // Draw saved snapshot with title "Saved"
+            let savedTitle = "Saved Snapshot"
+            savedTitle.draw(at: savedTitlePoint, withAttributes: [
+                NSAttributedString.Key.font: UIFont.systemFont(ofSize: fontSize),
+                NSAttributedString.Key.foregroundColor: UIColor.white
+            ])
+            savedSnapshot.draw(in: CGRect(origin: savedImagePoint, size: savedSnapshot.size))
+            
+            // Draw new snapshot beside the first with title "New"
+            let newTitle = "New Snapshot"
+            newTitle.draw(at: newTitlePoint, withAttributes: [
+                NSAttributedString.Key.font: UIFont.systemFont(ofSize: fontSize),
+                NSAttributedString.Key.foregroundColor: UIColor.white
+            ])
+            newSnapshot.draw(in: CGRect(origin: newImagePoint, size: newSnapshot.size))
+            
+            // Draw saved & new snapshot for stacking comparison with 50% opacity with title "Overlay"
+            let overlayTitle = "Both Overlayed"
+            overlayTitle.draw(at: overlayTitlePoint, withAttributes: [
+                NSAttributedString.Key.font: UIFont.systemFont(ofSize: fontSize),
+                NSAttributedString.Key.foregroundColor: UIColor.white
+            ])
+            savedSnapshot.draw(in: CGRect(origin: overlayImagePoint, size: savedSnapshot.size), blendMode: .normal, alpha: 0.5)
+            newSnapshot.draw(in: CGRect(origin: overlayImagePoint, size: newSnapshot.size), blendMode: .normal, alpha: 0.5)
+        }
+    }
 }
 
 @available(iOS 16.0, *)
@@ -129,3 +196,5 @@ private extension SnapshotManager {
         return snapshotTestDirectoryUrl.appending(path: snapshotName)
     }
 }
+
+#endif
