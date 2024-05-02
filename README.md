@@ -99,6 +99,8 @@ When set to `true`, it deletes existing snapshots.
 
 When set to `true`, it saves comparison snapshots with a "-FAILED" suffix. This allows for easy comparison between the saved and new snapshot.
 
+You can also set the `SNAPSHOT_SAVE_FAILURE_COMPARISON` argument in the schema Arguments Passed On Launch. This will ensure that for all failed snapshots a comparison snapshot will be saved.
+
 ```swift
 class YourSnapshotTests: XCTestCase {
 

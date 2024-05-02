@@ -77,7 +77,8 @@ public extension XCTestCase {
             
             if newImage.pngData() != previousImage.pngData() {
                 
-                if snapshotsSaveFailed {
+                if snapshotsSaveFailed ||
+                    ProcessInfo.processInfo.arguments.contains("SNAPSHOT_SAVE_FAILURE_COMPARISON")  {
                     let snapshotComparisonImage = manager.createFailedSnapshotComparison(
                         savedSnapshot: previousImage,
                         newSnapshot: newImage)
