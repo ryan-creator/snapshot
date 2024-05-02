@@ -143,7 +143,7 @@ class SnapshotManager {
             let savedTitle = "Saved Snapshot"
             savedTitle.draw(at: savedTitlePoint, withAttributes: [
                 NSAttributedString.Key.font: UIFont.systemFont(ofSize: fontSize),
-                NSAttributedString.Key.foregroundColor: UIColor.white
+                NSAttributedString.Key.foregroundColor: UIColor.black
             ])
             savedSnapshot.draw(in: CGRect(origin: savedImagePoint, size: savedSnapshot.size))
             
@@ -151,17 +151,17 @@ class SnapshotManager {
             let newTitle = "New Snapshot"
             newTitle.draw(at: newTitlePoint, withAttributes: [
                 NSAttributedString.Key.font: UIFont.systemFont(ofSize: fontSize),
-                NSAttributedString.Key.foregroundColor: UIColor.white
+                NSAttributedString.Key.foregroundColor: UIColor.black
             ])
             newSnapshot.draw(in: CGRect(origin: newImagePoint, size: newSnapshot.size))
             
-            // Draw saved & new snapshot for stacking comparison with 50% opacity with title "Overlay"
+            // Draw new snapshot on top of the saved snapshot for comparison with 50% opacity and the title "Overlay"
             let overlayTitle = "Both Overlayed"
             overlayTitle.draw(at: overlayTitlePoint, withAttributes: [
                 NSAttributedString.Key.font: UIFont.systemFont(ofSize: fontSize),
-                NSAttributedString.Key.foregroundColor: UIColor.white
+                NSAttributedString.Key.foregroundColor: UIColor.black
             ])
-            savedSnapshot.draw(in: CGRect(origin: overlayImagePoint, size: savedSnapshot.size), blendMode: .normal, alpha: 0.5)
+            savedSnapshot.draw(in: CGRect(origin: overlayImagePoint, size: savedSnapshot.size))
             newSnapshot.draw(in: CGRect(origin: overlayImagePoint, size: newSnapshot.size), blendMode: .normal, alpha: 0.5)
         }
     }
