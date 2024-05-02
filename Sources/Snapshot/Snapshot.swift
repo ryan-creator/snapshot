@@ -85,6 +85,7 @@ public extension XCTestCase {
                         image: snapshotComparisonImage,
                         named: "\(named)-FAILED",
                         testFilePath: file)
+                    self.add(XCTAttachment(image: snapshotComparisonImage))
                 }
                 
                 
